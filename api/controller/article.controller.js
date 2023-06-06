@@ -9,11 +9,11 @@ const API_KEY = "67945731797be1APIKEy";
 class ArticleController{
     getAll =  (req, res)=> {
 
-        // const apiKey = req.header("x-api-key");
+        const apiKey = req.header("x-api-key");
 
-        // if (!apiKey || apiKey !== API_KEY) {
-        //     return res.status(401).json({ message: "Unauthorized Access, Route Requires API Key" });
-        // }
+        if (!apiKey || apiKey !== API_KEY) {
+            return res.status(401).json({ message: "Unauthorized Access, Route Requires API Key" });
+        }
 
         article.find({"itemgroup": "Planets", "name": "Earth" }).then(docs=>{
             return res.status(200).send(docs)
