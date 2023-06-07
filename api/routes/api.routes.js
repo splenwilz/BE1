@@ -4,5 +4,7 @@ const router = express.Router();
 
 router.use('/article', require('./article.routes'));
 
+router.use('/user', require('./user.routes'));
+
 
 module.exports = router;
