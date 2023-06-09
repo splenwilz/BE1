@@ -27,9 +27,7 @@ class UserController{
         });
     }
 
-    register = (req, res) =>{
-
-       
+    register = (req, res) =>{      
 
 
         const body = req.body;        
@@ -45,24 +43,59 @@ class UserController{
         })
     }
       
+    login = (req, res) => {
+        const body = req.body;
+        user.findOne({ email: body.email }).then((user) => {
+          if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+          }
+      
+          bcrypt.compare(body.password, user.password, (err, result) => {
+            if (err) {
+              return res.status(500).send({ message: 'Error comparing passwords' });
+            }
+      
+            if (result) {
+              // Passwords match, user is authenticated
+              // You can generate a token or session here
+              return res.status(200).send({ message: 'Login successful' });
+            } else {
+              // Passwords do not match
+              return res.status(401).send({ message: 'Invalid credentials' });
+            }
+          });
+        }).catch((err) => {
+          return res.status(500).send({ message: err });
+        });
+      };
+      
 
-    create = (req, res)=>{
-
-        const apiKey = req.header("x-api-key");
-
-        if (!apiKey || apiKey !== API_KEY) {
-            return res.status(401).json({ message: "Unauthorized Access, Route Requires API Key" });
-        }
-
+    create = async (req, res)=>{       
 
         const body = req.body;
-        user.create(body).then(docs => {
-            return res.status(201).send(docs);
-        }).catch(err => {
-            return res.status(500).send({
-                message: err
-            });
-        })
+        user.findOne({ email: body.email }).then((user) => {
+          if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+          }
+      
+          bcrypt.compare(body.password, user.password, (err, result) => {
+            if (err) {
+              return res.status(500).send({ message: 'Error comparing passwords' });
+            }
+      
+            if (result) {
+              // Passwords match, user is authenticated
+              // You can generate a token or session here
+              return res.status(200).send({ message: 'Login successful' });
+            } else {
+              // Passwords do not match
+              return res.status(401).send({ message: 'Invalid credentials' });
+            }
+          });
+        }).catch((err) => {
+          return res.status(500).send({ message: err });
+        });
+       
     }
 }
 
