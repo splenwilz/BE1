@@ -1,14 +1,29 @@
 const express = require('express');
-let cors = require('cors');
-require('dotenv').config();
-
-require('./config/db')
-
-const apiRoutes = require('./routes/api.routes');
 const app = express();
+
+let cors = require('cors');
+const apiRoutes = require('./routes/api.routes');
+require('dotenv').config();
+require('./config/db');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
 app.use(express.json());
-app.use(cors());
+app.use(bodyParser.json());
+
+
+app.use(cookieParser());
+
+app.use(cors({
+    credentials: true, // Allow CORS credentials
+    origin: 'http://localhost:3000' // Set the allowed origin(s) for CORS
+}));
+
 app.use('/api', apiRoutes);
+
+
+// Enable CORS preflight
+app.options('*', cors());
 
 const port = process.env.PORT || 3000;
 

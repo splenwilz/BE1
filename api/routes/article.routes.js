@@ -8,8 +8,10 @@ const articleController = new ArticleController();
 
 router.post('/add', articleController.add)
 router.get('/getall', articleController.getAll)
+router.get('/post/:id', articleController.post)
 router.get('/getcontent', articleController.getContent)
-router.get('/getcontext', articleController.getContext)
+router.post('/getcontext', articleController.getContext)
+router.post('/getsiblings', articleController.getSiblings)
 
 
 module.exports = router;
