@@ -158,6 +158,17 @@ class ArticleController{
 
         res.json(postDoc);
     }
+
+    getParentDetails =  (req, res)=> {
+        const context = req.body;
+        console.log(context);
+        article.find(context).then(docs=>{
+            return res.status(200).send(docs)
+        }).catch(err => {
+            return res.status(500).send(
+                {message: "Internal Server Error"})
+        });
+    }
 }
 
 module.exports = ArticleController;

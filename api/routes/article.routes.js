@@ -12,6 +12,7 @@ router.get('/post/:id', articleController.post)
 router.get('/getcontent', articleController.getContent)
 router.post('/getcontext', articleController.getContext)
 router.post('/getsiblings', articleController.getSiblings)
+router.post('/getparentdetails', articleController.getParentDetails)
 
 
 module.exports = router;
