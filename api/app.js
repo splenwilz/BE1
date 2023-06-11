@@ -11,10 +11,7 @@ const bodyParser = require('body-parser');
 // Enable CORS preflight
 app.options('*', cors());
 
-app.use(cors({
-    credentials: true, // Allow CORS credentials
-    origin: 'https://be1game.onrender.com' // Set the allowed origin(s) for CORS
-}));
+app.use(cors);
 
 app.use(express.json());
 app.use(bodyParser.json());
