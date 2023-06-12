@@ -23,17 +23,19 @@ class ArticleController{
     }
 
     getContext =  (req, res)=> {
-        const { context } = req.body;
-        article.find({"itemgroup": "Continents", "parent": "Earth"}).then(docs=>{
+        const context = req.body;
+        console.log(context);
+        article.find(context).then(docs=>{
             return res.status(200).send(docs)
         }).catch(err => {
             return res.status(500).send(
                 {message: "Internal Server Error"})
         });
     }
-
+    
     getContent = (req, res) => {
-        const { context } = req.body; // Extract the 'context' value from the request body
+        const { context }  = req.body; // Extract the 'context' value from the request body
+        console.log(context);
         article
           .find({context}) // Use the 'context' value in the query
           .then(docs => {
@@ -43,7 +45,6 @@ class ArticleController{
             return res.status(500).send({ message: "Internal Server Error" });
           });
       };
-      
 
     add = (req, res)=>{
         const body = req.body;
@@ -54,6 +55,17 @@ class ArticleController{
                 message: err
             });
         })
+    }
+    post = async (req, res) => {
+        const id = req.params.id;
+        console.log(id);
+        
+        // const postDoc = await article.findById(id);
+        const postDoc = await article.find({"name" : id });
+
+        console.log(postDoc);
+
+        res.json(postDoc);
     }
 }
 
