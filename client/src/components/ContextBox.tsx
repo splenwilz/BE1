@@ -16,8 +16,9 @@ const ContextBox: React.FC<ContextBoxProps> = ({ imageSrc }) => {
       };
       
       
-      console.log(boxStyle.backgroundImage);
+      // console.log(boxStyle.backgroundImage);
   return (
+    
       <div className="article-box" style={boxStyle} />
   );
 };

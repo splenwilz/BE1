@@ -8,6 +8,7 @@ import ContextBox from './ContextBox';
 import Loading from './Loading';
 
 export type Context = {
+  _id: string,
   itemgroup: string;
   artworkimage: string;
   name: string;
@@ -41,11 +42,12 @@ export type Context = {
 function LeftPane() {
   const [contexts, setContexts] = useState<Context[] | null>(null);
   const [contextParent, setContextParent] = useState<string | null>(null);
-  // const contextParent = "North America";
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://be1game.onrender.com/api/article/getcontext');
+        const response = await axios.post('https://be1web.onrender.com/api/article/getcontext',{
+          "parent": "Earth"
+      });
         setContexts(response.data);
         setContextParent(response.data[0].parent)
         console.log(response.data[0].parent)
@@ -58,17 +60,13 @@ function LeftPane() {
   }, []);
 
   return (
-    <>
-      {/* <div className={styles.context__parent__container}>
-        <ContextParent 
-        imageSrc={'https://be1.s3.eu-north-1.amazonaws.com/'+contextParent+'.png'}
-        />        
-      </div> */}
+    <div style={{marginLeft:'2rem'}}>
 
       <div className={styles.context__parent__container}>
         {contextParent && (
           <ContextParent 
             imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/${contextParent.replace(/\s+/g, '+')}.png`}
+            articleLink={contextParent.replace(/\s+/g, '-')}
           />
         )}
       </div>
@@ -88,17 +86,18 @@ function LeftPane() {
       {contexts ? (
         contexts.map((context, index) => (
           
-          // setContextParent(context.imageurl)
           <ArticleBox
           key={index}
           imageSrc={context.imageurl}
+          articleLink={context.name.replace(/\s+/g, '-')}
+          title={context.name}
           />
         ))
       ) : (
         <Loading />
       )}
       </div>
-    </>
+    </div>
   );
 }
 

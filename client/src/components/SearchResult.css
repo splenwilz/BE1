@@ -1,0 +1,14 @@
+.search-result {
+  padding: 10px 20px;
+}
+.search-result a{
+  text-decoration: none;
+  line-height: 20px;
+  font-family: Arimo;
+  font-size: 13px;
+  color: #626A81;
+  /* border: 1px solid black; */
+}
+.search-result:hover {
+  /* background-color: #e8e9ee ; */
+}

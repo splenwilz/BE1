@@ -1,15 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MainContext from './MainContext';
 import styles from '../styles.module.css';
 import ContextBox from './ContextBox';
+import axios from 'axios';
 
 function MainPane() {
+  const [content, setContent] = useState<string | null>('');
+  const [references, setReferences] = useState<string | null>('');
+
+  const handleResizeHandleDoubleClick = (): void => {
+    console.log("Working");
+  };
+
+  useEffect(()=>{
+    const fetchContent = async () => {
+     try {
+       const response = await axios.post('https://be1web.onrender.com/api/article/getcontext',{
+         "name" : "Earth"
+       });
+       console.log(response.data[0].description);
+        setContent(response.data[0].description);
+       setReferences(response.data[0].references);
+       console.log(references);
+     } catch (error) {
+       console.error('Error fetching data:', error);
+     }
+     
+   };
+
+   fetchContent();
+ },[])
+
   return (
     <>
     <div className={styles.main__context__header__container}>
       <MainContext
-          imageSrc={"images/Be1 Tier1.svg"}
-      />
+          imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/Earth.png`}
+        />
       <div className={styles.chapters__breadcrump__container}>
         <div className={styles.group1}>
           {[...Array(5)].map((_, index) => (
@@ -31,10 +58,7 @@ function MainPane() {
 
     </div>
     <div className={styles.main__context__content}>
-      <p>
-      Center of the world’s tech industry (Silicon Valley) and entertainment industry (Hollywood), California has an economy so large ($3.63 trillion), that, if it were its own nation, its would be the fifth largest in the world, behind only the United States, China, Japan, and Germany, which it is poised to overtake. It is the only geographical location with a periodic-table element named after it (Californium); it is home to the world’s oldest plant, a Great Basin bristlecone pine tree named Methuselah, which is 4,853 years old, and is immortalized in numerous works of art, including songs such as “California Girls” and paintings by David Hockney.
-
-California, located on the Pacific Coast, is
+      <p>{content}
       </p>
     </div>
     </>

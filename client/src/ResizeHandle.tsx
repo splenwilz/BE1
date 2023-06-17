@@ -4,16 +4,25 @@ import styles from "./styles.module.css";
 
 export default function ResizeHandle({
   className = "",
-  id
+  id,
+  onDoubleClick,
 }: {
   className?: string;
   id?: string;
+  onDoubleClick?: () => void;
 }) {
+  const handleDoubleClick = () => {
+    if (onDoubleClick) {
+      onDoubleClick();
+    }
+  };
+
   return (
     <PanelResizeHandle
       className={[styles.ResizeHandleOuter, className].join(" ")}
       id={id}
     >
+    <div className={styles.panel__resize__container} onDoubleClick={handleDoubleClick}>
       <div className={styles.ResizeHandleInner}>
         <svg className={styles.Icon} viewBox="0 0 24 24">
           <path
@@ -22,6 +31,8 @@ export default function ResizeHandle({
           />
         </svg>
       </div>
+      </div>
     </PanelResizeHandle>
   );
 }
+

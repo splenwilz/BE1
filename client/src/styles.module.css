@@ -3,11 +3,13 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    margin-top: 50px;
     /* gap: 1rem; */
   }
   .TopRow {
     flex: 0 0 auto;
     text-align: center;
+    margin-top: 32px;
   }
   .BottomRow {
     flex: 1 1 auto;
@@ -78,17 +80,29 @@
     left: calc(50% - 0.5rem);
     top: calc(50% - 0.5rem);
   }
-  
 
   .context__parent__container{
     margin-top:50px;
     margin-bottom: 50px;
+    
+  }
+  .react-tabs__tab--selected{
+    background-color: #4949e7 !important;
+  }
+  .leftpane__container{
+
+    margin-left: 2rem;
   }
 
   .context__breadcrump__container{
     margin-bottom: 50px;
     width: 300px;
     margin-left:40px;
+  }
+  .context__hierarchy__container{
+    display: flex;
+    justify-content: center;
+    /* margin-bottom: 50px; */
   }
 
 
@@ -109,8 +123,18 @@
     flex-wrap: wrap;
     flex-direction: row;
   }
+  .context__container{
+    height: 200px;
+    overflow-y: scroll;
+  }
+  .context__containere{
+    margin-left: 20px;
+    padding-left: 20px;
+  }
   .main__context__header__container{
     height:190px;
+    margin-left: 20px;
+
   }
   .chapters__breadcrump__container{
     display: flex;
@@ -120,17 +144,43 @@
   }
 
   .main__context__content {
-    margin-top:50px;
+    margin-top:25px;
   }
 
-  .main__context__content p, .references__title, .references__body{
+  .main__context__content{
+
+    height: 300px;
+    overflow-y: scroll;   
+    padding-left: 20px;
+  }
+
+  .search__container{
+    display: flex;
+    justify-content: center;
+  }
+
+
+
+  
+
+  .main__context__content p,  .references__body{
     font-family: Arimo;
     font-size: 13px;
     color:#626A81;
     padding-right:20px;
   }
-  .references__body h2{
+  .references__title{
+
+  }
+  .references__body{
+    height: 70vh;
+    overflow-y: scroll;
+  }
+  .references__body h3{
+    font-family: Arimo;
     font-size: 15px;
+    color:#626A81;
+    padding-right:20px;
   }
   .references_header_linebreak{
     color:#626A81;
@@ -139,7 +189,7 @@
   }
 
   /* Loading */
-  /* .loadingContainer {
+  .loadingContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
@@ -175,19 +225,30 @@
     width: 80%;
     height: 16px;
     background-color: #eee;
-  } */
+  } 
   
 
 
 /* Socials */
 
+.content__container{
+  padding: 10px;
+  background-color: #fff;
+  width: 410px;
+  border-radius: 4px;
+}
+
   .content{
-  width: 320px;
-  background: var(--bg1);
-  /* box-shadow: var(--boxShadow); */
-  border-radius: 2px;
-  padding: 60px 45px;
-  margin-top: 45px;
+    /* display: flex;
+    justify-content: center; */
+    width: 320px;
+    background: var(--bg1);
+    background: #CED1CA;
+    /* box-shadow: var(--boxShadow); */
+    border: 10px;
+    border-radius: 4px;
+    border-color: #FFF;
+    padding: 60px 45px;
   }
   .content .text
   {
@@ -196,8 +257,7 @@
   margin-bottom: 35px;
   color: var(--color);
   }
-  .content .field
-  {
+  .content .field{
   height: 50px;
   width: 100%;
   display: flex;
@@ -229,21 +289,19 @@
   {
   margin-top: 20px;
   }
-  .field:nth-child(3)
-  {
+  .field:nth-child(3){
   margin-top: 20px;
   }
-  .field span
-  {
+  .field span{
   position: absolute;
   width: 50px;
   line-height: 50px;
   color: var(--tcolor);
   font-size: 22px;
   }
-  .content button
-  {
+  .registgration__button{
   margin: 25px 0;
+  margin-left:30px;
   width: 80%;
   height: 45px;
   color: var(--color);
@@ -294,6 +352,7 @@
   {
   color: #ff6100;
   text-decoration: none;
+  margin-left:7px;
   }
   .in:hover
   {
@@ -353,4 +412,49 @@
   text-shadow: var(--scitextshadow);
   
   }
-  
+  .regislogo{
+    width:100px
+  }
+  .logo__container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .logo__container img{
+    width: 200px;
+  }
+
+  .topnav{
+    display: flex;
+    padding: 20px;
+    float: right;
+  }
+
+  .topnav li{
+    list-style: none;
+  }
+  .topnav li a {
+    color:rgb(56, 55, 55);
+    padding-left:15px;
+    text-decoration: none;
+    font-size: 16px;
+    padding:10px;
+    border-radius: 4px;
+  }
+  .topnav li a:hover{
+    background-color: rgb(199, 198, 198);;
+    color:#282626
+  }
+
+
+  .terms__content{
+      color: #626A81;
+      height: 350px;
+      overflow-y: scroll;
+      line-height: 26px;
+      margin-top: 25px;
+  }
+  .terms__content h1{
+    position: fixed;
+    margin-top:-46px;
+  }
