@@ -28,12 +28,40 @@ class ArticleController{
         const context = req.body;
         console.log(context);
         article.find(context).then(docs=>{
-            return res.status(200).send(docs)
+            // return res.status(200).send(docs)
+            const results = docs.map(doc => ({
+              _id: doc._id,
+              name: doc.name,
+              heirarchy: doc.heirarchynumber2
+            }));
+    
+            return res.status(200).json(results);
         }).catch(err => {
             return res.status(500).send(
                 {message: "Internal Server Error"})
         });
     }
+
+    getContent = (req, res) => {
+      const context = req.body;
+        console.log(context);
+        article.find(context).then(docs=>{
+            // return res.status(200).send(docs)
+            const results = docs.map(doc => ({
+              _id: doc._id,
+              name: doc.name,
+              heirarchy: doc.heirarchynumber2,
+              description: doc.description,
+              references: doc.references
+            }));
+    
+            return res.status(200).json(results);
+        }).catch(err => {
+            return res.status(500).send(
+                {message: "Internal Server Error"})
+        });
+    };
+
     getContxt =  (req, res)=> {
         const id = req.body.id;
         console.log(id);
@@ -135,18 +163,7 @@ class ArticleController{
 
       
     
-    getContent = (req, res) => {
-        const { context }  = req.body; // Extract the 'context' value from the request body
-        console.log(context);
-        article
-          .find({context}) // Use the 'context' value in the query
-          .then(docs => {
-            return res.status(200).send(docs);
-          })
-          .catch(err => {
-            return res.status(500).send({ message: "Internal Server Error" });
-          });
-      };
+    
 
     add = (req, res)=>{
         const body = req.body;
