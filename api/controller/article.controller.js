@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const API_KEY = "67945731797be1APIKEy";
 
+
 class ArticleController{
     getAll =  (req, res)=> {
 
@@ -44,56 +45,6 @@ class ArticleController{
         });
     }
 
-    // getUpto = async (req, res) => {
-    //     const { startId, levelCount } = req.body;
-      
-    //     // Validate and sanitize the input parameters as needed
-      
-    //     // Check if startId is a valid ObjectId
-    //     if (!mongoose.Types.ObjectId.isValid(startId)) {
-    //       return res.status(400).json({ message: 'Invalid startId' });
-    //     }
-      
-    //     // Convert startId to ObjectId
-    //     const objectIdStartId = mongoose.Types.ObjectId(startId);
-      
-    //     // Find articles matching the criteria
-    //     try {
-    //       const docs = await article
-    //         .find({ _id: { $gte: objectIdStartId }, hierarchynumber: { $lte: levelCount } })
-    //         .select('_id name');
-      
-        //   const results = docs.map(doc => ({
-        //     _id: doc._id,
-        //     name: doc.name,
-        //   }));
-      
-    //       return res.status(200).json(results);
-    //     } catch (err) {
-    //       console.error(err);
-    //       return res.status(500).json({ message: 'Internal Server Error' });
-    //     }
-    //   };
-      
-    
-// Dependency = _id : { $gte: context }, 
-    // getUpto = async (req, res) => {
-    //     const context = req.body.id;
-    //     const levelCount = req.body.heirarchynumber2;
-    //     console.log(context);
-    //     article
-    //     .find({_id : { $gte: context }, "heirarchynumber2":{ $lte: levelCount } }).then(docs=>{
-    //         const results = docs.map(doc => ({
-    //         _id: doc._id,
-    //         name: doc.name,
-    //         heirarchy: doc.heirarchynumber2
-    //       }));
-    //       return res.status(200).json(results);
-    //     }).catch(err => {
-    //         return res.status(500).send(
-    //             {message: "Internal Server Error"})
-    //     });
-    // };
 
     getUpto = async (req, res) => {
         const { id, levelCount } = req.body;
@@ -218,6 +169,43 @@ class ArticleController{
 
         res.json(postDoc);
     }
+
+    
+    getParents = async (req, res) => {
+      const { id } = req.body;
+  
+      try {
+        const ancestors = await this.getAncestors(id);
+        return res.status(200).json(ancestors);
+      } catch (err) {
+        console.error(err);
+        return res.status(500).send({ message: 'Internal Server Error' });
+      }
+    };
+
+    async getAncestors(id, ancestors = []) {
+      const articleData = await article.findById(id);
+      if (!articleData) {
+        return ancestors;
+      }
+    
+      const parent = await article.findOne({ name: articleData.parent });
+      if (!parent) {
+        return ancestors;
+      }
+    
+      ancestors.unshift({ id: parent._id, name: parent.name, heirarchy: parent.heirarchynumber2 });
+      return this.getAncestors(parent._id, ancestors);
+    }
+    
+    
+    
+    
+    
+  
+
+
+
 }
 
 module.exports = ArticleController;
