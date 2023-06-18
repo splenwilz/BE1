@@ -159,10 +159,9 @@ useEffect(() => {
 
     const fetchHierarchy = async () => {
       try {
-        const response = await axios.post('https://be1web.onrender.com/api/article/getparents', {
-          "id": hid
+        const response = await axios.post('https://be1web.onrender.com/api/article/getancestors', {
+          "idname" : id2
         });
-        console.log(hid);
         console.log(id2?id2:"id2 not available");
         setParentHierarchy(response.data);
         console.log(response.data);
