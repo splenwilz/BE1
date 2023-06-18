@@ -14,9 +14,10 @@ import { SearchBar } from "../components/SearchBar";
 import { SearchResultsList } from "../components/SearchResultList";
 import Footer from "../components/Footer";
 import SentenceFormatter from "../components/SentenceFormatter";
-
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './Post.css';
+import HierarchyBox from "../components/HierarchyBox";
+
 
 
 export type Context = {
@@ -55,7 +56,6 @@ export type Context = {
 const transcribeMarkdownToText = (markdown: string) => {
   // Split the markdown text by newlines to separate each line
   const lines = markdown.split('\n');
-
   // Iterate over each line and check for markdown syntax to apply appropriate formatting
   const transcribedLines = lines.map((line, index) => {
     if (line.startsWith('## ')) {
@@ -84,13 +84,10 @@ export default function App() {
   const [showFirstPanel, setShowFirstPanel] = useState(true);
   const [showLastPanel, setShowLastPanel] = useState(true);
 
+  const [contexts, setContexts] = useState<Context[]>([]); 
+  const [contextParent, setContextParent] = useState<string>(''); 
 
-
-  const [contexts, setContexts] = useState<Context[]>([]); // Updated initial value to an empty array
-  const [contextParent, setContextParent] = useState<string>(''); // Updated initial value to an empty string
-
-  const [grandParent, setgrandParent] = useState<string>(''); // Updated initial value to an empty string
-
+  const [grandParent, setgrandParent] = useState<string>(''); 
   const [imageurl, setImageUrl] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [references, setReferences] = useState<string>('');
@@ -103,13 +100,10 @@ export default function App() {
 
   const [parentHierarchy, setParentHierarchy] = useState<number>(0)
 
-  // Add isLoading state
   const [isLoading, setIsLoading] = useState(true);
 
   const handleSearchIconClick = () => {
-    // Handle search icon click logic
     setIsBreadcrumpVisible(!isBreadcrumpVisible);
-    // This function will be called when the search icon is clicked in the SearchBar component
   };
 
 const { id } = useParams();
@@ -120,7 +114,6 @@ const id2 = id?.replace(/-/g, ' ');
 
 useEffect(() => {
   if (id) {
-    // setHeirarchy((heirarchy) => heirarchy + 1);
     console.log(heirarchy);
     const fetchData = async () => {
       try {
@@ -162,9 +155,6 @@ useEffect(() => {
       }
     };
 
-
-
-
     fetchContent();
     fetchData();
     fetchContext();
@@ -172,26 +162,27 @@ useEffect(() => {
 }, [id, contextParent, setContent, setReferences, setContexts]);
 
 
-const boxStyle: React.CSSProperties = {
-  backgroundImage: 'url(hierarchy/be1.gif)',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  width: '35px',
-  height: '35px',
-  margin: '2px',
-  cursor: 'pointer'
-};
+
+
 
   return (
     <>
+     <div>
+     
+    </div>
     <Header />
     <div className={styles.search__container}>
       {isBreadcrumpVisible && (
           <div className={styles.context__hierarchy__container}>
-            <div className="article-box" style={boxStyle}/>
+            <HierarchyBox 
+              key={0}
+              imageSrc={'hierarchy/be1.gif'}
+              articleLink={'../'}
+              title={'Be1 Stack'}
+            />
             {[...Array(heirarchy)].map((_, index) => (
             
-            <ArticleBox
+            <HierarchyBox
             key={index}
             imageSrc={`hierarchy/Be1 Tier${index + 1}.jpg`}
             articleLink={contextParent.replace(/\s+/g, '-')}
@@ -313,23 +304,21 @@ const boxStyle: React.CSSProperties = {
                     className={styles.Button}
                     onClick={() => setShowFirstPanel(!showFirstPanel)}
                   >
-                    {showFirstPanel ? "hide" : "show"} Content panel
+                    {showFirstPanel ? "minimize" : "maximize"} Context pane
                   </button>
                   &nbsp;
                   <button
                     className={styles.Button}
                     onClick={() => setShowLastPanel(!showLastPanel)}
                   >
-                    {showLastPanel ? "hide" : "show"} Reference panel
+                    {showLastPanel ? "minimize" : "maximize"} Reference pane
                   </button>
                 </p>
               </div>
             <div className={styles.main__context__content}>
            
-            {/* <SentenceFormatter text={content}/> */}
             <SentenceFormatter text={content} sectionHeader="## Journalism References" />
     
-              {/* <p>{content}</p> */}
             </div>
             </Panel>
             {showLastPanel && (
@@ -349,7 +338,6 @@ const boxStyle: React.CSSProperties = {
                       </h2>
                       <div className={styles.references_header_linebreak}></div>
                       <div className={styles.references__body}>
-                        {/* <p>{references?references:"No references found"}</p> */}
                         {transcribeMarkdownToText(references?references:"No references found")}
                       </div>
                     </>

@@ -11,6 +11,7 @@ router.get('/getall', articleController.getAll)
 router.get('/post/:id', articleController.post)
 router.get('/getcontent', articleController.getContent)
 router.post('/getcontext', articleController.getContext)
+router.post('/getupto', articleController.getUpto)
 router.post('/getsiblings', articleController.getSiblings)
 router.post('/getparentdetails', articleController.getParentDetails)
 

@@ -28,3 +28,22 @@ footer {
     color: #666;
   }
   
+
+  /* ...existing styles... */
+
+footer .footer-links {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+footer .footer-links a {
+  color: #333;
+  margin-right: 10px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+footer .footer-links a:hover {
+  color: #007bff;
+}

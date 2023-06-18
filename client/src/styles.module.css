@@ -56,15 +56,18 @@
   }
   
   .Button {
-    color: var(--color-default);
-    background-color: var(--color-button-background);
-    border: 1px solid var(--color-button-border);
+    color: #E3E3E3;
+    background-color: #C1C1C1;
+    border: 1px solid #cecece;
     border-radius: 0.25rem;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
   }
   .Button:hover {
-    background-color: var(--color-button-background-hover);
+    background-color: #D5D5D5;
+    border: 1px solid #d2d2d2;
+    color: #847f7f;
+    
   }
   
   .Link {

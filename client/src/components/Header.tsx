@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext,Component } from 'react';
 import styles from "../styles.module.css";
 import axios from 'axios';
+
 
 function Header() {
   const [email, setEmail] = useState<string | null>(null);
@@ -38,6 +39,9 @@ function Header() {
   }
 
   return (
+    <>
+    
+
     <div>
       <a href="../">
         <img src="../images/logo.gif" alt="" className={styles.regislogo}/>
@@ -60,10 +64,12 @@ function Header() {
             <li className="">
               <a href="/register">Register</a>
             </li>
+
           </>
         )}
       </ul>
     </div>
+    </>
   );
 }
 
