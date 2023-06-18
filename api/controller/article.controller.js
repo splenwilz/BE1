@@ -32,6 +32,22 @@ class ArticleController{
                 {message: "Internal Server Error"})
         });
     }
+    getUpto = (req, res) => {
+        const context = req.body;
+        console.log(context);
+
+        article.find(context).then(docs=>{
+            const id = docs._id;
+            const name = docs.name;
+            const hierarchy = docs.hierarchynumber2;
+            const document = {id, name, hierarchy};
+
+            return res.status(200).send(document);
+        }).catch(err => {
+            return res.status(500).send(
+                {message: "Internal Server Error"})
+        });
+    }
     
     getContent = (req, res) => {
         const { context }  = req.body; // Extract the 'context' value from the request body
