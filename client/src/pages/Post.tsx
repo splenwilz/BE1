@@ -88,7 +88,7 @@ export default function App() {
   const [contextParent, setContextParent] = useState<string>(''); 
 
   const [grandParent, setgrandParent] = useState<string>(''); 
-  const [imageurl, setImageUrl] = useState<string>('');
+  const [hid, setHid] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [references, setReferences] = useState<string>('');
 
@@ -97,8 +97,8 @@ export default function App() {
 
   const [heirarchy, setHeirarchy] = useState<number>(0);
   const [isBreadcrumpVisible, setIsBreadcrumpVisible] = useState(true);
-
-  const [parentHierarchy, setParentHierarchy] = useState<number>(0)
+  
+  const [parentHierarchy, setParentHierarchy] = useState<any[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -119,14 +119,16 @@ useEffect(() => {
       try {
         const response = await axios.get(`https://be1web.onrender.com/api/article/post/${id2}`);
         const postData = response.data[0];
-        console.log(postData);
+        // console.log(postData);
 
-        setImageUrl(postData.imageurl);
+        setHid(postData._id);
         setContent(postData.description);
         setHeirarchy(postData.heirarchynumber2);
         setReferences(postData.references);
         setContextParent(postData.name);
         setgrandParent(postData.parent);
+
+        
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -155,6 +157,21 @@ useEffect(() => {
       }
     };
 
+    const fetchHierarchy = async () => {
+      try {
+        const response = await axios.post('https://be1web.onrender.com/api/article/getparents', {
+          "id": hid
+        });
+        console.log(hid);
+        console.log(id2?id2:"id2 not available");
+        setParentHierarchy(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchHierarchy();
+
     fetchContent();
     fetchData();
     fetchContext();
@@ -180,7 +197,16 @@ useEffect(() => {
               articleLink={'../'}
               title={'Be1 Stack'}
             />
-            {[...Array(heirarchy)].map((_, index) => (
+            {parentHierarchy.map((parentItem, index) => (
+              <HierarchyBox
+                key={index}
+                imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/${parentItem.name.replace(/\s+/g, '+')}.png`}
+                articleLink={parentItem.name.replace(/\s+/g, '-')}
+                title={parentItem.name}
+              />
+            ))}
+
+            {/* {[...Array(heirarchy)].map((_, index) => (
             
             <HierarchyBox
             key={index}
@@ -188,7 +214,7 @@ useEffect(() => {
             articleLink={contextParent.replace(/\s+/g, '-')}
             title={contextParent}
           />
-          ))}
+          ))} */}
           </div>
       )}
       <div className="search-bar-container">
