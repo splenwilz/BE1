@@ -99,6 +99,7 @@ export default function App() {
   const [isBreadcrumpVisible, setIsBreadcrumpVisible] = useState(true);
   
   const [parentHierarchy, setParentHierarchy] = useState<any[]>([]);
+  const [siblings, setSiblings] = useState<any[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -171,11 +172,23 @@ useEffect(() => {
         console.error('Error fetching data:', error);
       }
     };
-    fetchHierarchy();
-
-    fetchContent();
-    fetchData();
+    const fetchSiblings = async () => {
+      try {
+        const response = await axios.post('https://be1web.onrender.com/api/article/getsiblings', {
+          "name" : id2
+        });
+        console.log(id2?id2:"id2 not available");
+        setSiblings(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();    
     fetchContext();
+    fetchContent();
+    fetchHierarchy();
+    fetchSiblings();
   }
 }, [id, contextParent, setContent, setReferences, setContexts]);
 
@@ -207,21 +220,13 @@ useEffect(() => {
               />
             ))}
             <HierarchyBox 
-              key={0}
+              key={-1}
               imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/${contextParent.replace(/\s+/g, '+')}.png`}
               articleLink={contextParent.replace(/\s+/g, '-')}
               title={contextParent}
             />
 
-            {/* {[...Array(heirarchy)].map((_, index) => (
-            
-            <HierarchyBox
-            key={index}
-            imageSrc={`hierarchy/Be1 Tier${index + 1}.jpg`}
-            articleLink={contextParent.replace(/\s+/g, '-')}
-            title={contextParent}
-          />
-          ))} */}
+          
           </div>
       )}
       <div className="search-bar-container">
@@ -268,7 +273,7 @@ useEffect(() => {
                     <Tabs>
                       <TabList >
                         <Tab>Context</Tab>
-                        <Tab>Topic Clusters</Tab>
+                        <Tab>Clusters</Tab>
                       </TabList>
 
                       <TabPanel>
@@ -280,7 +285,7 @@ useEffect(() => {
                           
                           <ArticleBox
                           key={index}
-                          imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/${context.imageurl.replace(/\s+/g, '+')}.png`}
+                          imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/${context.name.replace(/\s+/g, '+')}.png`}
                           articleLink={context.name.replace(/\s+/g, '-')}
                           title={context.name}
                           />
@@ -292,7 +297,22 @@ useEffect(() => {
                    
                       </TabPanel>
                       <TabPanel>
-                        <h2>Any content 2</h2>
+                        <div className={styles.context__container}>       
+
+                        {siblings ? (
+                          siblings.map((sibling, index) => (
+                            
+                            <ArticleBox
+                            key={index}
+                            imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/${sibling.name.replace(/\s+/g, '+')}.png`}
+                            articleLink={sibling.name.replace(/\s+/g, '-')}
+                            title={sibling.name}
+                            />
+                          ))
+                        ) : (
+                          <Loading />
+                        )}
+                        </div>
                       </TabPanel>
                     </Tabs>
                     </div>
