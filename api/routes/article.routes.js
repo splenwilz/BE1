@@ -15,7 +15,7 @@ router.post('/getupto', articleController.getUpto)
 router.post('/getupto1', articleController.getUpto1)
 router.post('/getupto2', articleController.getUpto2)
 router.post('/getparents', articleController.getParents)
-
+router.post('/getancestors', articleController.getParentName)
 router.get('/post/:id', articleController.post)
 
 

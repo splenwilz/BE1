@@ -158,19 +158,14 @@ class ArticleController{
             });
         })
     }
+    // Get Article By Name
     post = async (req, res) => {
-        const id = req.params.id;
-        console.log(id);
-        
-        // const postDoc = await article.findById(id);
+        const id = req.params.id;        
         const postDoc = await article.find({"name" : id });
-
-        console.log(postDoc);
-
         res.json(postDoc);
     }
 
-    
+    // Get Ancestors By Id
     getParents = async (req, res) => {
       const { id } = req.body;
   
@@ -197,6 +192,43 @@ class ArticleController{
       ancestors.unshift({ id: parent._id, name: parent.name, heirarchy: parent.heirarchynumber2 });
       return this.getAncestors(parent._id, ancestors);
     }
+
+    // Get Ancestors By Name
+    getParentName = async (req, res) => {
+      const { idname } = req.body;
+    
+      try {
+        const ancestors = await this.getParentAncestors(idname);
+        return res.status(200).json(ancestors);
+      } catch (err) {
+        console.error(err);
+        return res.status(500).send({ message: 'Internal Server Error' });
+      }
+    };
+    
+    getParentAncestors = async (idname, ancestors = []) => {
+      const articleData = await article.findOne({ name: idname });
+      if (!articleData) {
+        // If articleData is not found, return an empty ancestors array
+        return ancestors;
+      }
+    
+      const parent = await article.findOne({ name: articleData.parent });
+      if (!parent) {
+        // If parent is not found, return the current ancestors array
+        return ancestors;
+      }
+    
+      ancestors.unshift({ id: parent._id, name: parent.name, heirarchy: parent.heirarchynumber2 });
+      return this.getParentAncestors(parent.name, ancestors);
+    };
+    
+    
+
+    
+    
+    
+    
     
     
     
