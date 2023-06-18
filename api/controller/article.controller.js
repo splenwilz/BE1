@@ -222,6 +222,34 @@ class ArticleController{
       ancestors.unshift({ id: parent._id, name: parent.name, heirarchy: parent.heirarchynumber2 });
       return this.getParentAncestors(parent.name, ancestors);
     };
+
+    // Get the siblings
+    getSiblingsByName = async (req, res) => {
+      const { name } = req.body;
+    
+      try {
+        // Find the requested article by name
+        const articleData = await article.findOne({ name });
+        if (!articleData) {
+          return res.status(404).json({ message: 'Article not found' });
+        }
+    
+        // Find all the siblings of the requested article
+        const siblings = await article.find({ parent: articleData.parent, _id: { $ne: articleData._id } });
+        const results = siblings.map(sibling => ({
+          _id: sibling._id,
+          name: sibling.name,
+          heirarchy: sibling.heirarchynumber2
+        }));
+
+        return res.status(200).json(results);
+        // return res.status(200).json(siblings);
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+      }
+    };
+    
     
     
 
