@@ -127,6 +127,7 @@ useEffect(() => {
         setReferences(postData.references);
         setContextParent(postData.name);
         setgrandParent(postData.parent);
+        // setContexts(response.data);
 
         
 
@@ -141,6 +142,7 @@ useEffect(() => {
           parent: contextParent
         });
         setContexts(response.data);
+        // setReferences(response.data[0].references);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -204,6 +206,12 @@ useEffect(() => {
                 title={parentItem.name}
               />
             ))}
+            <HierarchyBox 
+              key={0}
+              imageSrc={`https://be1.s3.eu-north-1.amazonaws.com/${contextParent.replace(/\s+/g, '+')}.png`}
+              articleLink={contextParent.replace(/\s+/g, '-')}
+              title={contextParent}
+            />
 
             {/* {[...Array(heirarchy)].map((_, index) => (
             
