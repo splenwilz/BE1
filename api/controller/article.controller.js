@@ -28,7 +28,14 @@ class ArticleController{
         const context = req.body;
         console.log(context);
         article.find(context).then(docs=>{
-            return res.status(200).send(docs)
+          const results = docs.map(doc => ({
+            _id: doc._id,
+            name: doc.name,
+            heirarchy: doc.heirarchynumber2,
+            description: doc.description,
+            references: doc.references
+          }));
+            return res.status(200).send(results)
         }).catch(err => {
             return res.status(500).send(
                 {message: "Internal Server Error"})
@@ -38,7 +45,15 @@ class ArticleController{
         const id = req.body.id;
         console.log(id);
         article.find({ _id: id}).then(docs=>{
-            return res.status(200).send(docs)
+            // return res.status(200).send(docs)
+            const results = docs.map(doc => ({
+              _id: doc._id,
+              name: doc.name,
+              heirarchy: doc.heirarchynumber2,
+              description: doc.description,
+              references: doc.references
+            }));
+              return res.status(200).send(results)
         }).catch(err => {
             return res.status(500).send(
                 {message: "Internal Server Error"})
@@ -141,7 +156,15 @@ class ArticleController{
         article
           .find({context}) // Use the 'context' value in the query
           .then(docs => {
-            return res.status(200).send(docs);
+            // return res.status(200).send(docs);
+            const results = docs.map(doc => ({
+              _id: doc._id,
+              name: doc.name,
+              heirarchy: doc.heirarchynumber2,
+              description: doc.description,
+              references: doc.references
+            }));
+              return res.status(200).send(results)
           })
           .catch(err => {
             return res.status(500).send({ message: "Internal Server Error" });
