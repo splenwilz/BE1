@@ -62,7 +62,10 @@ class ArticleController{
 
 
     getUpto = async (req, res) => {
-        const { id, levelCount } = req.body;
+        var { id, levelCount } = req.body;
+        if (!id) {
+          id = "648b24ee4e3c575200802cb6"
+        }
       
         try {
           const articleData = await article.findById(id);
@@ -89,6 +92,59 @@ class ArticleController{
           return res.status(500).send({ message: "Internal Server Error" });
         }
     };
+    
+
+    // getUpto = async (req, res) => {
+    //   const { id, levelCount } = req.body;
+    
+    //   try {
+    //     let objectIdStartId;
+    
+    //     // If the ID parameter is not provided, find the topmost ID
+    //     if (!id) {
+    //       const topMostArticle = await article.findOne().sort({ heirarchynumber2: 1 });
+    //       if (!topMostArticle) {
+    //         return res.status(404).json({ message: 'No articles found' });
+    //       }
+    //       objectIdStartId = topMostArticle._id;
+    //     } else {
+    //       // Validate and convert the provided ID to ObjectId
+    //       if (!mongoose.Types.ObjectId.isValid(id)) {
+    //         return res.status(400).json({ message: 'Invalid ID' });
+    //       }
+    //       objectIdStartId = mongoose.Types.ObjectId(id);
+    //     }
+    
+    //     const articleData = await article.findById(objectIdStartId);
+    //     if (!articleData) {
+    //       return res.status(404).json({ message: 'Article not found' });
+    //     }
+    
+    //     const heirarchynumber2 = articleData.heirarchynumber2;
+    //     const updatedLevelCount = heirarchynumber2 + levelCount;
+    
+    //     article
+    //       .find({ _id: { $gte: objectIdStartId }, heirarchynumber2: { $lte: updatedLevelCount } })
+    //       .then(docs => {
+    //         const results = docs.map(doc => ({
+    //           _id: doc._id,
+    //           name: doc.name,
+    //           heirarchy: doc.heirarchynumber2
+    //         }));
+    
+    //         return res.status(200).json(results);
+    //       })
+    //       .catch(err => {
+    //         console.error(err);
+    //         return res.status(500).send({ message: 'Internal Server Error' });
+    //       });
+    //   } catch (err) {
+    //     console.error(err);
+    //     return res.status(500).send({ message: 'Internal Server Error' });
+    //   }
+    // };
+    
+    
 
     getUpto1 = async (req, res) => {
         const { id, levelCount } = req.body;
