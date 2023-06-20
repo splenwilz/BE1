@@ -6,7 +6,58 @@ const mongoose = require('mongoose');
 
 const API_KEY = "67945731797be1APIKEy";
 
+// Working Version
+// async function fetchNestedChildren(parentName, levelCount, hierarchyNumber) {
+//   const children = await article.find({ parent: parentName }).exec();
 
+//   if (levelCount && levelCount <= 0) {
+//     return [];
+//   }
+
+//   const formattedChildren = await Promise.all(
+//     children.map(async (child) => {
+//       if (child.heirarchynumber2 > hierarchyNumber + levelCount) {
+//         return null;
+//       }
+
+//       const nestedChildren = await fetchNestedChildren(child.name, levelCount - 1, hierarchyNumber);
+//       return {
+//         _id: child._id,
+//         name: child.name,
+//         heirarchynumber2: child.heirarchynumber2,
+//         children: nestedChildren,
+//       };
+//     })
+//   );
+
+//   return formattedChildren.filter((child) => child !== null);
+// }
+
+async function fetchNestedChildren(parentName, levelCount, hierarchyNumber) {
+  const children = await article.find({ parent: parentName }).exec();
+
+  if (levelCount && levelCount <= 0) {
+    return [];
+  }
+
+  const formattedChildren = await Promise.all(
+    children.map(async (child) => {
+      if (child.heirarchynumber2 > hierarchyNumber + levelCount) {
+        return null;
+      }
+     
+      const nestedChildren = await fetchNestedChildren(child.name, levelCount - 1, hierarchyNumber);
+      return {
+        _id: child._id,
+        name: child.name,
+        heirarchynumber2: child.heirarchynumber2,
+        children: nestedChildren,
+      };
+    })
+  );
+
+  return formattedChildren.filter((child) => child !== null);
+}
 class ArticleController{
     getAll =  (req, res)=> {
 
@@ -59,92 +110,100 @@ class ArticleController{
                 {message: "Internal Server Error"})
         });
     }
-
-
-    getUpto = async (req, res) => {
-        var { id, levelCount } = req.body;
-        if (!id) {
-          id = "648b24ee4e3c575200802cb6"
-        }
-      
-        try {
-          const articleData = await article.findById(id);
-          const heirarchynumber2 = articleData.heirarchynumber2;
-          const updatedLevelCount = heirarchynumber2 + levelCount;
-      
-          article
-            .find({ _id: { $gte: id }, heirarchynumber2: { $lte: updatedLevelCount } })
-            .then(docs => {
-              const results = docs.map(doc => ({
-                _id: doc._id,
-                name: doc.name,
-                heirarchy: doc.heirarchynumber2
-              }));
-      
-              return res.status(200).json(results);
-            })
-            .catch(err => {
-              console.error(err);
-              return res.status(500).send({ message: "Internal Server Error" });
-            });
-        } catch (err) {
-          console.error(err);
-          return res.status(500).send({ message: "Internal Server Error" });
-        }
-    };
-    
-
+  
+    // Working Version
     // getUpto = async (req, res) => {
-    //   const { id, levelCount } = req.body;
-    
     //   try {
-    //     let objectIdStartId;
+    //     const { id, levelCount } = req.body;
+    //     const defaultId = "648b24ee4e3c575200802cb6";
+    //     const articleData = await article.findById(id || defaultId);
+    //     const parentname = articleData.name;
     
-    //     // If the ID parameter is not provided, find the topmost ID
-    //     if (!id) {
-    //       const topMostArticle = await article.findOne().sort({ heirarchynumber2: 1 });
-    //       if (!topMostArticle) {
-    //         return res.status(404).json({ message: 'No articles found' });
-    //       }
-    //       objectIdStartId = topMostArticle._id;
-    //     } else {
-    //       // Validate and convert the provided ID to ObjectId
-    //       if (!mongoose.Types.ObjectId.isValid(id)) {
-    //         return res.status(400).json({ message: 'Invalid ID' });
-    //       }
-    //       objectIdStartId = mongoose.Types.ObjectId(id);
-    //     }
+    //     const formattedChildren = await fetchNestedChildren(parentname, levelCount, articleData.heirarchynumber2);
     
-    //     const articleData = await article.findById(objectIdStartId);
-    //     if (!articleData) {
-    //       return res.status(404).json({ message: 'Article not found' });
-    //     }
+    //     const result = {
+    //       _id: articleData._id,
+    //       name: articleData.name,
+    //       heirarchynumber2: articleData.heirarchynumber2,
+    //       children: formattedChildren,
+    //     };
     
-    //     const heirarchynumber2 = articleData.heirarchynumber2;
-    //     const updatedLevelCount = heirarchynumber2 + levelCount;
-    
-    //     article
-    //       .find({ _id: { $gte: objectIdStartId }, heirarchynumber2: { $lte: updatedLevelCount } })
-    //       .then(docs => {
-    //         const results = docs.map(doc => ({
-    //           _id: doc._id,
-    //           name: doc.name,
-    //           heirarchy: doc.heirarchynumber2
-    //         }));
-    
-    //         return res.status(200).json(results);
-    //       })
-    //       .catch(err => {
-    //         console.error(err);
-    //         return res.status(500).send({ message: 'Internal Server Error' });
-    //       });
+    //     return res.status(200).json([result]);
     //   } catch (err) {
     //     console.error(err);
-    //     return res.status(500).send({ message: 'Internal Server Error' });
+    //     return res.status(500).send({ message: err.message || "Internal Server Error" });
     //   }
     // };
+
+    // getUpto = async (req, res) => {
+    //   try {
+    //     const { id } = req.body;
+    //     var levelCount = req.body.levelCount;
+    //     if(levelCount == 1){
+    //       levelCount = 1;
+    //     }else if(levelCount == 2){
+    //       levelCount = 3;
+    //     }else if(levelCount == 3){
+    //       levelCount = 5
+    //     }else if(levelCount == 4){
+    //       levelCount = 7
+    //     }else if(levelCount == 5){
+    //       levelCount = 9
+    //     }else if(levelCount == 6){
+    //       levelCount = 11
+    //     }else if(levelCount == 7){
+    //       levelCount = 15
+    //     }
+    //     const defaultId = "648b24ee4e3c575200802cb6";
+    //     const articleData = await article.findById(id || defaultId);
+    //     const parentname = articleData.name;
+    
+    //     const formattedChildren = await fetchNestedChildren(parentname, levelCount, articleData.heirarchynumber2);
+    
+    //     const result = {
+    //       _id: articleData._id,
+    //       name: articleData.name,
+    //       heirarchynumber2: articleData.heirarchynumber2,
+    //       children: formattedChildren,
+    //     };
+    
+    //     return res.status(200).json([result]);
+    //   } catch (err) {
+    //     console.error(err);
+    //     return res.status(500).send({ message: err.message || "Internal Server Error" });
+    //   }
+    // };
+
+    getUpto = async (req, res) => {
+      try {
+        const { id, levelCount } = req.body;
+        const defaultId = "648b24ee4e3c575200802cb6";
+        const articleData = await article.findById(id || defaultId);
+        const parentname = articleData.name;
+    
+        const adjustedLevelCount = levelCount * 2 - 1;
+    
+        const formattedChildren = await fetchNestedChildren(parentname, adjustedLevelCount, articleData.heirarchynumber2);
+    
+        const result = {
+          _id: articleData._id,
+          name: articleData.name,
+          heirarchynumber2: articleData.heirarchynumber2,
+          children: formattedChildren,
+        };
+    
+        return res.status(200).json([result]);
+      } catch (err) {
+        console.error(err);
+        return res.status(500).send({ message: err.message || "Internal Server Error" });
+      }
+    };
     
     
+
+   
+
+
 
     getUpto1 = async (req, res) => {
         const { id, levelCount } = req.body;
@@ -242,7 +301,7 @@ class ArticleController{
         const id = req.params.id;        
         const postDoc = await article.find({"name" : id });
         res.json(postDoc);
-    }
+    };
 
     // Get Ancestors By Id
     getParents = async (req, res) => {
