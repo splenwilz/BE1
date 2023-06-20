@@ -177,8 +177,11 @@ class ArticleController{
     getUpto = async (req, res) => {
       try {
         const { id, levelCount } = req.body;
-        const defaultId = "648b24ee4e3c575200802cb6";
-        const articleData = await article.findById(id || defaultId);
+    
+        // Retrieve the top-most article based on heirarchynumber2
+        const topArticle = await article.findOne().sort({ heirarchynumber2: 1 });
+    
+        const articleData = await article.findById(id || topArticle._id).lean();
         const parentname = articleData.name;
     
         const adjustedLevelCount = levelCount * 2 - 1;
@@ -198,6 +201,7 @@ class ArticleController{
         return res.status(500).send({ message: err.message || "Internal Server Error" });
       }
     };
+    
     
     
 
